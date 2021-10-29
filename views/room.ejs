@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+  </head>
+  <body>
+    <h1>Test</h1>
+    <pre id="users">
+
+    </pre>
+    <div id="test" style="min-height: 100vh;background: red">
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <script>
+      const room = '<%= room %>'
+      let game = <%- JSON.stringify(game) %>
+      var socket = io();
+      // to send: 
+      // socket.emit('chat message', input.value);
+      document.querySelector('#users').innerHTML = game.users
+      document.querySelector('#test').onclick= () => {
+        socket.emit('update_user_click', 1)
+      }
+      socket.on('update', function(msg) {
+        console.log('passo')
+        game = msg
+        document.querySelector('#users').innerHTML = JSON.stringify(game.users)
+
+      });
+    </script>
+  </body>
+</html>
