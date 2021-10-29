@@ -1,0 +1,16 @@
+{
+  "name": "Halloween game",
+  "short_name": "terrore",
+  "description": "App per halloween.",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "display": "fullscreen",
+  "theme_color": "#000000",
+  "background_color": "#000000"
+}

@@ -8,14 +8,15 @@ const port = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/game/index.html');
-});
-
 const gameRoomPrefix = 'user-'
 
 const users = {}
-
+app.get('/',(req,res,next) => {
+  
+  res.render('index',{
+    users
+  })
+})
 app.get('/dashboard', (req, res) => {
   console.log('_',users)
   io.on('connection', (socket) => {
@@ -36,7 +37,7 @@ app.get('/dashboard', (req, res) => {
         users[key].user.time = time;
         users[key].user.light = true;
         io.emit('users_update',users)
-        if ( time === 0) {
+        if ( time < 1) {
           users[key].user.light = false;
           users[key].user.time = 60;
           clearInterval(int)

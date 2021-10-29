@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
+
+  <link rel="manifest" href="/js13kpwa.webmanifest">
+  
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body style="background: black">
+  <div class="app app-dashboard" >
+    <h1 class="nes-text is-disabled">Halloween Game!</h1>
+    <div 
+      v-for="user, $i of users"
+      :key="$i"
+    >
+      <a
+      :href="'/rooms/'+user.user.name"
+      class="nes-container with-title is-centered is-link"
+      :class="{
+        'is-dark': 'user.user.light'
+      }"
+      >
+        <p class="title">{{user.user.name}}</p>
+        <button class="nes-btn is-primary m-auto">Vai</button>
+
+      </a>
+    </div>
+
+
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script>
+  const USERS = <%- JSON.stringify(users) %>
+  </script>
+  <script src="/index.js"></script>
+</body>
+</html>

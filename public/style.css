@@ -40,6 +40,9 @@ html, body, pre, code, kbd, samp {
   flex-wrap: wrap;
   text-align: center;
 }
+.is-link{
+  display: block !important;
+}
 .content > * {
   display: block;
   min-width: 100%;
