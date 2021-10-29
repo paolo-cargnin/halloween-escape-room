@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app app-dashboard">
+    <h1>Halloween Game!</h1>
+    
+    <div 
+      v-for="user, $i of users"
+      :key="$i"
+    >
+      <div
+      class="nes-container with-title is-centered"
+      :class="{
+        'is-dark': 'user.user.light'
+      }"
+      >
+        <p class="title">{{user.user.name}}</p>
+        <div v-if="!user.user.light">
+          <center for="name_field center">è al buio</center>
+          <div class="d-flex">
+            <button
+              type="button"
+              class="nes-btn is-primary"
+              @click="user.user.time = user.user.time - 10">-10</button>
+            <div class="nes-field center">
+              <input type="text" id="name_field" class="nes-input" v-model="user.user.time"> 
+            </div>
+            <button
+              type="button"
+              class="nes-btn is-primary"
+              @click="user.user.time = user.user.time + 10">+10</button>
+          </div>
+          <button
+          type="button"
+          class="nes-btn is-success m-auto"
+          @click="light(user,$i)">Dagli luce!</button>
+        </div>
+        <div v-else>
+          {{user.user.time}}
+        </div>
+        <br><br>
+        <button v-if="!user.user.light" type="button" class="nes-btn is-error m-auto" @click="deleteSession(user)">Rimuovi</button>
+      </div>
+    </div>
+
+
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script>
+  const USERS = <%- JSON.stringify(users) %>
+  </script>
+  <script src="/dashboard.js"></script>
+</body>
+</html>

@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Ciao</title>
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
-    <h1>Test</h1>
-    <pre id="users">
+    <div class="app room-app">
+      <div
+        class="content"
+        :class="{
+          'active': user.user.light
+        }"
+      >
+      <div class="nes-text title" :class="{
+        'is-disabled': !user.user.light
+      }">{{user.user.name}}</div>
+      <h1 v-if="user.user.light" class="nes-text is-error"> {{user.user.time}}</h1>
+      <h1 v-else> Sei al buio</h1>
 
-    </pre>
-    <div id="test" style="min-height: 100vh;background: red">
+    </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    
+    <script src="https://unpkg.com/vue@next"></script>
     <script>
-      const room = '<%= room %>'
-      let game = <%- JSON.stringify(game) %>
-      var socket = io();
-      // to send: 
-      // socket.emit('chat message', input.value);
-      document.querySelector('#users').innerHTML = game.users
-      document.querySelector('#test').onclick= () => {
-        socket.emit('update_user_click', 1)
-      }
-      socket.on('update', function(msg) {
-        console.log('passo')
-        game = msg
-        document.querySelector('#users').innerHTML = JSON.stringify(game.users)
-
-      });
+    const ROOM = '<%= room %>'
+    const USER = <%- JSON.stringify(user) %>
     </script>
+    <script src="/room.js"></script>
   </body>
 </html>

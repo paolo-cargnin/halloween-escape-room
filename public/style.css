@@ -1,0 +1,50 @@
+html, body, pre, code, kbd, samp {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.title{
+  text-transform: capitalize;
+}
+
+.m-auto{
+  margin: auto;
+  display: block;
+}
+.app-dashboard{
+  width: 90%;
+  margin:auto;
+}
+.center{
+  text-align: center;
+  display: block !important;
+}
+.d-flex{
+  display: flex;
+  align-items: center
+}
+.nes-container{
+  margin-top: 2rem !important;
+}
+.content{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  background-color: #000;
+  color: white;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
+.content > * {
+  display: block;
+  min-width: 100%;
+}
+.content.active{
+  color: black;
+  background-color: white;
+}

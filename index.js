@@ -1,3 +1,4 @@
+const express = require('express');
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -5,64 +6,75 @@ const port = process.env.PORT || 3000;
 // var Datastore = require('nedb');
 // var rooms = new Datastore();
 app.set('view engine', 'ejs');
-
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/game/index.html');
 });
 
-const gameRoomPrefix = 'room-'
+const gameRoomPrefix = 'user-'
 
-const games = {
-}
+const users = {}
+
+app.get('/dashboard', (req, res) => {
+  console.log('_',users)
+  io.on('connection', (socket) => {
+    socket.on('delete_session',(session) => {
+      const i = gameRoomPrefix+session.user.name
+      delete users[i]
+      io.emit('users_update',users)
+    })
+    
+    socket.on('start_light_session',({user,key}) => {
+      console.log(user)
+      let {time} = user
+      users[key].user.time = time;
+      users[key].user.light = true;
+      io.emit('users_update',users)
+      const int = setInterval(() => {
+        time--
+        users[key].user.time = time;
+        users[key].user.light = true;
+        io.emit('users_update',users)
+        if ( time === 0) {
+          users[key].user.light = false;
+          users[key].user.time = 60;
+          clearInterval(int)
+          io.emit('users_update',users)
+        }
+      },1000)
+    })
+  })
+  res.render('dashboard',{
+    users
+  })
+})
 app.get('/rooms/:gameId', (req, res) => {
   //Get room name
   const roomName = gameRoomPrefix+req.params.gameId
   // If the game doesn't exsist, I'll inizialize it
-  if (!games[roomName]){
-    games[roomName] = {
-      users: [],
-      game: {
-      }
+  if (!users[roomName]){
+    users[roomName] = {
+      user: {
+        time: 60,
+        name: req.params.gameId,
+        light: false
+      },
     }
   }
 
   // Connect the user to the socket
   io.on('connection', (socket) => {
-    // Join the socket room
-    socket.join(roomName)
-    // If the user is new, add it
-    users = io.sockets.adapter.rooms.get(roomName);
-    if (!games[roomName].users.find((u) => (u.id == socket.id))){
-      const newUser = {
-        id: socket.id,
-        ready: false,
-        name: '',
-        click: 0
-      }
-      
-      games[roomName].users.push(newUser)
-      io.to(roomName).emit('update',games[roomName])
-    }
+    io.emit('users_update',users)
 
-    // When the user closes the session, i remove it from the game
-    socket.on("disconnect", () => {
-      games[roomName].users = games[roomName].users.filter((u) => u.id !== socket.id)
-      io.to(roomName).emit('update',games[roomName])
-    });
-    
-    // When we received a game update
-    // We send it back to all the users
     socket.on(roomName+'_update', gameUpdate => {
-      io.to(roomName).emit('update',gameUpdate)
+      io.emit(roomName+'_update',gameUpdate)
     });
-    
-
   });
 
   res.render('room',{
     room: roomName,
-    game: games[roomName]
+    user: users[roomName]
   });
 
 });
